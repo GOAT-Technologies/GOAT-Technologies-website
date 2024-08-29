@@ -783,6 +783,10 @@ html {
   }
   
   @media screen and (max-width: 991px) {
+    .rounded-image {
+      border-radius: 20px; /* Rounded corners on mobile */
+    }
+    
     .w-container {
       max-width: 728px;
     }
@@ -851,6 +855,10 @@ html {
   }
   
   @media screen and (max-width: 767px) {
+    .rounded-image {
+      border-radius: 20px; /* Rounded corners on mobile */
+    }
+
     .w-hidden-main, .w-hidden-medium {
       display: inherit !important;
     }

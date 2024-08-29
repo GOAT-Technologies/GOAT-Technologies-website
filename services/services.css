@@ -851,6 +851,10 @@ html {
   }
   
   @media screen and (max-width: 767px) {
+    .desktop-only-image {
+      display: none; /* Hidden on mobile devices */
+    }
+    
     .w-hidden-main, .w-hidden-medium {
       display: inherit !important;
     }
