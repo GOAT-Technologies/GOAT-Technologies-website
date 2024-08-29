@@ -3679,7 +3679,14 @@ html {
     padding-left: 5rem;
     padding-right: 5rem;
     display: flex;
-    height: auto;
+  }
+
+  .paddingg-global-services {
+    flex-flow: column;
+    padding-left: 5rem;
+    padding-right: 5rem;
+    display: flex;
+    height: 700px;
   }
   
   .padding-section-medium {
@@ -5096,10 +5103,10 @@ html {
   }
   
   .about-team-collection-list {
-    grid-column-gap: 4rem;
-    grid-row-gap: 3rem;
+    grid-column-gap: 6rem;
+    grid-row-gap: 4rem;
     grid-template-rows: auto;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-auto-columns: 1fr;
     display: grid;
   }
@@ -9266,6 +9273,13 @@ html {
     .paddingg-global {
       padding-left: 2rem;
       padding-right: 2rem;
+      height: auto;
+    }
+
+    .paddingg-global-services {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      height: auto;
     }
   
     .padding-section-medium {
@@ -10440,6 +10454,13 @@ html {
     .paddingg-global {
       padding-left: 1.5rem;
       padding-right: 1.5rem;
+      height: auto;
+    }
+
+    .paddingg-global-services {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      height: auto;
     }
   
     .padding-section-medium {
@@ -11416,6 +11437,13 @@ html {
     .paddingg-global {
       padding-left: 1.5rem;
       padding-right: 1.5rem;
+      height: auto;
+    }
+
+    .paddingg-global-services {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      height: auto;
     }
   
     .padding-section-medium {
