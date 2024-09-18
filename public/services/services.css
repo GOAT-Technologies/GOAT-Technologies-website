@@ -4861,7 +4861,7 @@ html {
     height: auto;
   }
   
-  .footer-top-links-wrapper {
+  /*.footer-top-links-wrapper {
     grid-column-gap: 2rem;
     grid-row-gap: 2rem;
     grid-template-rows: auto;
@@ -4869,6 +4869,18 @@ html {
     grid-auto-columns: 1fr;
     width: 100%;
     max-width: 32rem;
+    display: grid;
+  }*/
+
+  .footer-top-links-wrapper {
+    grid-column-gap: 2rem;
+    grid-row-gap: 2rem;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-columns: 1fr;
+    width: 100%;
+    max-width: none;
+    max-width: 50rem;
     display: grid;
   }
   
