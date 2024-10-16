@@ -54,10 +54,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Update the URL to use the current origin (same as the page)
         //const submitUrl = `${window.location.origin}/submit-form`;
-        const submitUrl = `/submit-form`;
-        console.log('Submitting to:', submitUrl);
+        // const submitUrl = `submit-form`;
+        // console.log('Submitting to:', submitUrl);
 
-        fetch(submitUrl, {
+        fetch('/submit-form', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
