@@ -53,7 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.disabled = true;
 
         // Update the URL to use the current origin (same as the page)
-        const submitUrl = `${window.location.origin}/submit-form`;
+        //const submitUrl = `${window.location.origin}/submit-form`;
+        const submitUrl = `http://localhost:3000/submit-form`;
         console.log('Submitting to:', submitUrl);
 
         fetch(submitUrl, {

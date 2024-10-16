@@ -74,12 +74,12 @@
       })(window, document);
     </script>
     <link
-      href=".../Images/Images/Goat2.svg"
+      href="../Images/Goat2.svg"
       rel="shortcut icon"
       type="image/x-icon"
     />
     <link
-      href=".../Images/Goat2.svg"
+      href="../Images/Goat2.svg"
       rel="apple-touch-icon"
     />
     <script
@@ -137,7 +137,8 @@
             <div class="nav-flex-wrapper">
               <a href="/" class="nav-flex-logo w-nav-brand" aria-label="home"
                 ><img
-                  src="/Images/goat_tech-01.png"
+                   
+                  src="../Images/goat_tech-01.png"
                   loading="lazy"
                   alt=""
                   class="logo-img" /></a
@@ -511,11 +512,16 @@
                       <div class="w-dyn-list">
                         <div role="list" class="w-dyn-items">
                           <div role="listitem" class="w-dyn-item">
-                            <picture>
-                              <source media="(max-width: 767px)" srcset="/Images/services/hardware2.webp">
-                              <source media="(min-width: 768px)" srcset="/Images/services/hardware.webp">
+                            <!-- <picture>
+                              <source media="(max-width: 767px)" srcset="../Images/services/hardware2.webp">
+                              <source media="(min-width: 768px)" srcset=".../public/Images/services/hardware.webp">
                               <img src="desktop-image.jpg" alt="Fallback image">
-                            </picture>
+                            </picture> -->
+                            <img
+                              src="../Images/services/hardware.webp"
+                              sizes="(min-width: 768px)"
+                              alt=""
+                            />
                             
                             <!--
                             <div
@@ -651,8 +657,10 @@
                       opacity: 1;
                     "
                   >
+                    
                     <img
-                      src="/Images/services/hardware2.webp"
+                      
+                      src="../Images/services/hardware2.webp"
                       loading="lazy"
                       sizes="(max-width: 479px) 90vw, (max-width: 991px) 94vw, 40vw"
                       alt=""
@@ -1249,7 +1257,7 @@
               <div class="footer-top-wrapper">
                 <div class="footer-top-left-wrapper">
                   <a href="/" aria-current="page" class="footer-top-logo w-inline-block w--current">
-                    <img src="/Images/Goat_Tech.pngblack.png" loading="lazy" alt="" class="footer-logo" />
+                    <img src="../Images/Goat_Tech.pngblack.png" loading="lazy" alt="" class="footer-logo" />
                   </a>
                   <div class="footer-sm-wrapper">
                     <p class="text-color-white">Follow Us:</p>
