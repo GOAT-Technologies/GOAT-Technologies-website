@@ -52,12 +52,12 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.value = 'Submitting...';
         submitButton.disabled = true;
 
-        // Update the URL to use the current origin (same as the page)
-        //const submitUrl = `${window.location.origin}/submit-form`;
-        const submitUrl = `http://localhost:3000/submit-form`;
+        // Update the URL to use the current origin
+        // const submitUrl = `${window.location.origin}/submit-form`;
+        const submitUrl = `/submit-form`;
         console.log('Submitting to:', submitUrl);
 
-        fetch(submitUrl, {
+        fetch( submitUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
