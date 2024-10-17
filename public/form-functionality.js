@@ -45,46 +45,63 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function submitForm() {
-        console.log('Submitting form via AJAX');
+        console.log('Submitting form');
         const formData = new FormData(form);
         const formDataObject = Object.fromEntries(formData.entries());
 
         submitButton.value = 'Submitting...';
         submitButton.disabled = true;
 
-        // Update the URL to use the current origin (same as the page)
-        //const submitUrl = `${window.location.origin}/submit-form`;
-        // const submitUrl = `submit-form`;
-        // console.log('Submitting to:', submitUrl);
-
-        fetch('/submit-form', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formDataObject)
-        })
-        .then(response => {
-            console.log('Response received:', response);
-            if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error(text || `HTTP error! status: ${response.status}`);
+        // Simulate server-side processing
+        setTimeout(() => {
+            processFormData(formDataObject)
+                .then(response => {
+                    console.log('Success:', response);
+                    showSuccess();
+                    form.reset();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showError(`An error occurred. Please try again later. ${error.message}`);
+                })
+                .finally(() => {
+                    submitButton.value = 'Submit';
+                    submitButton.disabled = false;
                 });
+        }, 1000); // Simulate network delay
+    }
+
+    function processFormData(data) {
+        // Simulate server-side processing and Google Sheets API interaction
+        return new Promise((resolve, reject) => {
+            console.log('Processing form data:', data);
+
+            const requiredFields = ['name', 'Last-Name', 'Email-id', 'Select-Country', 'Enquiry-For'];
+            for (let field of requiredFields) {
+                if (!data[field]) {
+                    reject(new Error(`Missing required field: ${field}`));
+                    return;
+                }
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Success:', data);
-            showSuccess();
-            form.reset();
-        })
-        .catch(error => {
-            console.error('Error details:', error);
-            showError(`An error occurred. Please try again later. ${error.message}`);
-        })
-        .finally(() => {
-            submitButton.value = 'Submit';
-            submitButton.disabled = false;
+
+            // Simulate appending data to Google Sheets
+            const rowData = [
+                data.name,
+                data['Last-Name'],
+                data['Email-id'],
+                data.Company || '',
+                data['Select-Country'],
+                data['Phone-Number'] || '',
+                data.City || '',
+                data['Enquiry-For'],
+                data['Contact-form-Message'] || '',
+                new Date().toISOString() // Timestamp
+            ];
+
+            console.log('Data to be appended:', rowData);
+
+            // Simulate successful submission
+            resolve({ message: 'Form submitted successfully' });
         });
     }
 
