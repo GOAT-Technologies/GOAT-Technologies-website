@@ -1,0 +1,13 @@
+include ../layout
+
+append head 
+    title #{blog.blog_title}
+    meta(name="description", content=blog.blog_description)
+
+    link(rel="stylesheet", href="/styles/single-blog.css")
+
+block content
+    .blog-container
+        h1 #{blog.blog_title}
+        .content 
+            != blog.content

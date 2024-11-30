@@ -1,0 +1,24 @@
+extends ../layout
+
+append head 
+    title Editing #{data.blog_title} - GOAT Technologies
+    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css")
+    link(rel="stylesheet" href="/styles/blog-editor.css")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js") 
+    script(src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js") 
+    script(src="/scripts/blog.js" type="module")
+  
+block content 
+    .editor-header 
+        .info 
+            h1 #{data.blog_title}
+        .actions
+            button.btn.btn-secondary#save-draft-btn Save Draft
+            button.btn.btn-primary#publish-btn Publish
+    div#blog-editor
+    div#preview
+    button#back-to-top T
+
+    script.
+        const blog_id = "#{blog_id}"

@@ -1,0 +1,24 @@
+extends ../layout
+
+append head 
+    title New Blog - Goat Technologies 
+    link(rel="stylesheet", href="/styles/new-blog.css")
+    script(src="/scripts/new-blog.js") 
+
+block content 
+    h1 Create a New Blog 
+
+    form#new-blog-form(action="/blog/new" method="POST")
+        label(for="blog_title") Title
+            input(type="text" name="blog_title" required=true)
+        label(for="blog_description") Description
+            input(type="text" name="blog_description" required=true)
+        label(for="blog_keywords") Keywords
+            input(type="text" name="blog_keywords") 
+            small Comma separated keywords i.e web, blockchanin, ...
+        label(for="blog_lead_img") Blog Image
+            input(type="file")
+
+        .actions 
+            a.btn.btn-secondary(href="/") Back to Home
+            button.btn.btn-primary(type="submit") Proceed to Editor    

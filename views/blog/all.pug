@@ -1,0 +1,18 @@
+include ../layout
+
+append head
+    title GOAT Technologies Blog
+    meta(name="description", content="")
+    link(rel="stylesheet", href="/styles/all-blogs.css")
+
+block content
+    .blogs-container
+        each blog in blogs
+            .blog-container
+                .top
+                    img.lead_img(src=blog.blog_lead_img)
+                .bottom
+                    p.title #{blog.blog_title}
+                    p.description #{blog.blog_description} 
+                .link
+                    a(href=`/blog/${blog._id}/${blog.blog_title}`) Read Full Blog &rarr; 

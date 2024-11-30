@@ -1,14 +1,19 @@
+// @ts-nocheck
 const express = require('express');
 const bodyParser = require('body-parser');
 const { google } = require('googleapis');
 const { default: moongoose } = require("mongoose");
 const Enquiry = require('./models/enquiry-model');
 const sendMail = require('./utils/mailer');
+const uuid = require("uuid");
+const Blog = require('./models/blog-model');
 
 require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.set("view engine", "pug")
 
 // Middleware
 app.use(bodyParser.json());
@@ -27,17 +32,91 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get("/blog/new", async (req, res) => {
+  try {
+    res.render("blog/new-blog")
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ status: 'fail', message: 'internal server error' })
+  }
+});
 
-// // Google Sheets API setup
-// const auth = new google.auth.GoogleAuth({
-//   keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-//   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-// });
+app.post("/blog/new", async (req, res) => {
+  try {
+    const data = req.body;
+    if (!data.blog_title) {
+      res.render("blog/new-blog", { data, error: { blog_title: 'title is required' } });
+      return;
+    }
+    if (!data.blog_description) {
+      res.render("blog/new-blog", { data, error: { blog_description: 'description is required' } });
+      return;
+    }
+    // const blog_id = uuid.v4();
+    console.log({ data });
+    // save blog data to db
+    const newBlog = new Blog({ ...data })
+    await newBlog
+      .save()
+    res.render("blog/editor", { data, blog_id: newBlog._id })
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ status: 'fail', message: 'internal server error' })
+  }
+})
 
-// const sheets = google.sheets({ version: 'v4', auth });
-// const spreadsheetId = process.env.SPREADSHEET_ID;
 
-// Form submission route
+app.get("/blog/editor", async (req, res, next) => {
+  try {
+    res.render("blog/editor")
+  } catch (error) {
+    console.error(error)
+    res.status(500).send({ status: 'fail', message: 'internal server error.' })
+  }
+})
+
+app.post("/blog/save", async (req, res) => {
+  console.log('hello')
+  try {
+    const data = req.body;
+    console.log({ data });
+    const updatedBlog = await Blog.findByIdAndUpdate(data.id, data.data)
+    console.log({ updatedBlog })
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ status: 'fail', message: 'internal server error' })
+  }
+})
+
+app.get("/blog/:blog_id/:blog_title", async (req, res) => {
+  try {
+    const blog_id = req.params.blog_id;
+    const blog = await Blog.findById(blog_id);
+    if (!blog) {
+      res.render("blog/404")
+      return;
+    }
+    console.log({blog })
+    res.render("blog/single", { blog })
+  } catch (error) {
+
+  }
+})
+
+app.get("/blog/index.html", async (req, res) => {
+  try {
+    const blogs = await Blog
+        .find()
+        .select(['_id', 'blog_title', 'blog_description', 'blog_lead_img', 'author'])
+        .where({ publish: true })
+    console.log({ blogs })
+    res.render("blog/all", { blogs })
+  } catch (error) {
+
+  }
+})
+
+
 app.post('/submit-form', async (req, res) => {
   try {
     console.log('Received form data:', req.body);
@@ -62,14 +141,13 @@ app.post('/submit-form', async (req, res) => {
               <p>Hello,</p>
               <p>
                 I am <span style="color: sky-blue; font-weight: 600;">${req.body.name} ${req.body['Last-Name']}</span> from <b>${req.body.City ? req.body.City + ', ' : ''}${req.body['Select-Country']}</b>.
-                ${req.body.Company ? 'Company name: '+ req.body.Company : ''}
+                ${req.body.Company ? 'Company name: ' + req.body.Company : ''}
               </p>
               <br />
               <p>
-                My Enquiry is on: <b>${
-                  req.body['Enquiry-For'].startsWith('Our') ? 
-                    'GOAT Technologies ' + req.body['Enquiry-For'].split(' ')[1] : req.body['Enquiry-For']
-                }<b>.
+                My Enquiry is on: <b>${req.body['Enquiry-For'].startsWith('Our') ?
+              'GOAT Technologies ' + req.body['Enquiry-For'].split(' ')[1] : req.body['Enquiry-For']
+            }<b>.
               </p>
               <p>
                ${req.body['Contact-form-Message'] ? req.body['Contact-form-Message'] : ''}  
