@@ -116,6 +116,20 @@ app.get("/blog/index.html", async (req, res) => {
   }
 })
 
+app.get("/blog/all", async (req, res) => {
+  try {
+    const blogs = await Blog
+      .find()
+      .select(['_id', 'blog_title', 'blog_description', 'blog_lead_img', 'author'])
+      .where({publish: true})
+      .limit(3)
+    res.status(200).send({status: 'ok', blogs})
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({status: 'fail', message: 'internal server error'})
+  }
+})
+
 
 app.post('/submit-form', async (req, res) => {
   try {
