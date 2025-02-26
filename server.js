@@ -2,13 +2,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { google } = require('googleapis');
-const { default: moongoose } = require("mongoose");
+const { default: mongoose } = require("mongoose");
 const Enquiry = require('./models/enquiry-model');
 const sendMail = require('./utils/mailer');
 const uuid = require("uuid");
 const Blog = require('./models/blog-model');
+const authenticateToken = require('./middleware/authMiddleware');
+const authRoutes = require('./routes/auth');
+const dotenv = require('dotenv');
 
-require('dotenv').config();
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -32,39 +35,68 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/auth', authRoutes);
+
 app.get("/blog/new", async (req, res) => {
   try {
-    res.render("blog/new-blog")
+res.render("blog/new-blog");
   } catch (error) {
     console.error(error);
-    res.status(500).send({ status: 'fail', message: 'internal server error' })
+    res.status(500).send({ status: 'fail', message: 'internal server error' });
   }
 });
 
 app.post("/blog/new", async (req, res) => {
   try {
     const data = req.body;
-    if (!data.blog_title) {
-      res.render("blog/new-blog", { data, error: { blog_title: 'title is required' } });
+    if (!data.blog_title || !data.blog_description) {
+      res.render("blog/new-blog", { data, error: { message: 'Title and description are required' } });
       return;
     }
-    if (!data.blog_description) {
-      res.render("blog/new-blog", { data, error: { blog_description: 'description is required' } });
-      return;
-    }
-    // const blog_id = uuid.v4();
-    console.log({ data });
-    // save blog data to db
-    const newBlog = new Blog({ ...data })
-    await newBlog
-      .save()
-    res.render("blog/editor", { data, blog_id: newBlog._id })
+    const newBlog = new Blog({ ...data });
+    await newBlog.save();
+    res.render("blog/editor", { data, blog_id: newBlog._id });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ status: 'fail', message: 'internal server error' })
+    res.status(500).send({ status: 'fail', message: 'internal server error' });
   }
-})
+});
 
+app.post("/blog/save", async (req, res) => {
+  try {
+    const { id, data } = req.body;
+    const updatedBlog = await Blog.findByIdAndUpdate(id, data, { new: true });
+    res.status(200).send({ status: 'ok', updatedBlog });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ status: 'fail', message: 'internal server error' });
+  }
+});
+
+app.get("/blog/all", async (req, res) => {
+  try {
+    const blogs = await Blog.find({ publish: true }).select(['_id', 'blog_title', 'blog_description', 'blog_lead_img', 'author']);
+    res.status(200).send({ status: 'ok', blogs });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ status: 'fail', message: 'internal server error' });
+  }
+});
+
+app.get("/blog/:blog_id/:blog_title", async (req, res) => {
+  try {
+    const blog_id = req.params.blog_id;
+    const blog = await Blog.findById(blog_id);
+    if (!blog) {
+      res.render("blog/404");
+      return;
+    }
+    res.render("blog/single", { blog });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ status: 'fail', message: 'internal server error' });
+  }
+});
 
 app.get("/blog/editor", async (req, res, next) => {
   try {
@@ -75,61 +107,15 @@ app.get("/blog/editor", async (req, res, next) => {
   }
 })
 
-app.post("/blog/save", async (req, res) => {
-  console.log('hello')
-  try {
-    const data = req.body;
-    console.log({ data });
-    const updatedBlog = await Blog.findByIdAndUpdate(data.id, data.data)
-    console.log({ updatedBlog })
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ status: 'fail', message: 'internal server error' })
-  }
-})
+// Route to serve the blog editor page
+app.get('/blog-editor', authenticateToken, (req, res) => {
+  res.sendFile(__dirname + '/public/resources/blog-editor.html');
+});
 
-app.get("/blog/:blog_id/:blog_title", async (req, res) => {
-  try {
-    const blog_id = req.params.blog_id;
-    const blog = await Blog.findById(blog_id);
-    if (!blog) {
-      res.render("blog/404")
-      return;
-    }
-    console.log({blog })
-    res.render("blog/single", { blog })
-  } catch (error) {
-
-  }
-})
-
-app.get("/blog/index.html", async (req, res) => {
-  try {
-    const blogs = await Blog
-        .find()
-        .select(['_id', 'blog_title', 'blog_description', 'blog_lead_img', 'author'])
-        .where({ publish: true })
-    console.log({ blogs })
-    res.render("blog/all", { blogs })
-  } catch (error) {
-
-  }
-})
-
-app.get("/blog/all", async (req, res) => {
-  try {
-    const blogs = await Blog
-      .find()
-      .select(['_id', 'blog_title', 'blog_description', 'blog_lead_img', 'author'])
-      .where({publish: true})
-      .limit(3)
-    res.status(200).send({status: 'ok', blogs})
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({status: 'fail', message: 'internal server error'})
-  }
-})
-
+// Route to handle blog post creation
+app.post('/create-blog', authenticateToken, (req, res) => {
+  // Handle blog post creation logic
+});
 
 app.post('/submit-form', async (req, res) => {
   try {
@@ -155,7 +141,7 @@ app.post('/submit-form', async (req, res) => {
               <p>Hello,</p>
               <p>
                 I am <span style="color: sky-blue; font-weight: 600;">${req.body.name} ${req.body['Last-Name']}</span> from <b>${req.body.City ? req.body.City + ', ' : ''}${req.body['Select-Country']}</b>.
-                ${req.body.Company ? 'Company name: ' + req.body.Company : ''}
+                ${req.body.Company ? 'Company name: ' + req.body.Company : ''} 
               </p>
               <br />
               <p>
@@ -186,7 +172,7 @@ app.post('/submit-form', async (req, res) => {
   }
 });
 
-moongoose.connect(`${process.env.MONGODB_URI}/${process.env.DB_NAME}`)
+mongoose.connect(`${process.env.MONGODB_URI}/${process.env.DB_NAME}`)
   .then(() => {
     console.info('[Mongoose Connect] Successful')
     app.listen(port, () => {

@@ -1,24 +1,21 @@
 extends ../layout
 
 append head 
-    title New Blog - Goat Technologies 
+    title New Blog - Goat Technologies
     link(rel="stylesheet", href="/styles/new-blog.css")
     script(src="/scripts/new-blog.js") 
 
 block content 
     h1 Create a New Blog 
 
-    form#new-blog-form(action="/blog/new" method="POST")
-        label(for="blog_title") Title
-            input(type="text" name="blog_title" required=true)
-        label(for="blog_description") Description
-            input(type="text" name="blog_description" required=true)
-        label(for="blog_keywords") Keywords
-            input(type="text" name="blog_keywords") 
-            small Comma separated keywords i.e web, blockchanin, ...
-        label(for="blog_lead_img") Blog Image
-            input(type="file")
+    form#new-blog-form(action="/blog/new" method="POST" enctype="multipart/form-data")
+        label(for="blog_title") Blog Title
+            input(type="text" name="blog_title" placeholder="Blog Title" required=true)
+        label(for="blog_description") Blog Description
+            textarea(name="blog_description" placeholder="Blog Description" required=true)
+        label(for="blog_lead_img") Lead Image
+            input(type="file" name="blog_lead_img" accept="image/*" required=true)
 
         .actions 
             a.btn.btn-secondary(href="/") Back to Home
-            button.btn.btn-primary(type="submit") Proceed to Editor    
+            button.btn.btn-primary(type="submit") Proceed to Editor
