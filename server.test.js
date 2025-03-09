@@ -1,6 +1,6 @@
 const request = require('supertest');
 const nodemailer = require('nodemailer');
-const app = require('./src/server'); // Assuming your main app file is named app.js
+const app = require('./server'); // Assuming your main app file is named app.js
 require('dotenv').config();
 
 jest.setTimeout(30000); // Increase overall timeout to 30 seconds
