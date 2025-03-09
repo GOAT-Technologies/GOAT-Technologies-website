@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+      "checkJs": true,
+      "baseUrl": ".",
+      "paths": {
+        "quill": ["node_modules/quill"]
+      }
+    }
+  }
+  

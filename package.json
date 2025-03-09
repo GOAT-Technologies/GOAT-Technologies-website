@@ -19,10 +19,16 @@
     "mongoose": "^8.7.3",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.11.2",
-    "nodemailer": "^6.9.15"
+    "nodemailer": "^6.9.15",
+    "nodemon": "^3.1.9",
+    "pug": "^3.0.3",
+    "quill": "^2.0.3",
+    "suneditor": "^2.47.5",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "supertest": "^7.0.0"
+    "supertest": "^7.0.0",
+    "nodemon": "^3.1.7"
   }
 }
