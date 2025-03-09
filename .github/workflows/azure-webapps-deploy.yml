@@ -1,0 +1,33 @@
+name: Deploy to Azure App Service
+
+on:
+  push:
+    branches:
+      - main  # or your default branch
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          
+      - name: Install dependencies and run tests
+        run: |
+          npm install
+          npm test
+        
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'goattechnologies'  # Your App Service name
+          slot-name: 'staging'          # Your deployment slot name
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: .                    # Path to your app code
