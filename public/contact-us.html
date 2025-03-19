@@ -41,6 +41,12 @@
       rel="preconnect"
       crossorigin="anonymous"
     />
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+    <script>
+      (function() {
+        emailjs.init('RfV6Td4rrNo9r1InV'); // Initialize EmailJS with your User ID
+      })();
+    </script>
     <script
       type="text/javascript"
       async=""
@@ -585,7 +591,7 @@
                         name="wf-form-Contact-Form"
                         data-name="Contact Form"
                         method="POST"
-                        action="/submit-form"                       
+                        action=""                       
                         class="contact-modal6_form"
                         data-wf-page-id="66683173b040d2d54b46b05a"
                         data-wf-element-id="1f30cd63-abd1-a1c1-56af-82b5fc750d8a"
@@ -1696,5 +1702,33 @@
         ></iframe>
       </div>
     </div>
+    <script>
+      document.getElementById('wf-form-Contact-Form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+    
+        // Get form data
+        const formData = {
+          name: document.getElementById('name').value,
+          last_name: document.getElementById('Last-Name').value,
+          email: document.getElementById('Email-id').value,
+          country: document.getElementById('Select-Country-3').value,
+          enquiry: document.getElementById('Enquiry-For-3').value,
+          message: document.getElementById('Contact-form-Message').value,
+          phone: document.getElementById('Phone-Number').value,
+          company: document.getElementById('Company').value,
+          city: document.getElementById('City-3').value,
+        };
+    
+        // Send email using EmailJS
+        emailjs.send('service_m7vdv03', 'template_gjibb9c', formData)
+          .then(function(response) {
+            console.log('SUCCESS!', response.status, response.text);
+            document.querySelector('.w-form-done').style.display = 'block'; // Show success message
+          }, function(error) {
+            console.log('FAILED...', error);
+            document.querySelector('.w-form-fail').style.display = 'block'; // Show error message
+          });
+      });
+    </script>
   </body>
 </html>
