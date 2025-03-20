@@ -6,10 +6,6 @@
         outline: none;
       }
     </style>
-    <meta
-      http-equiv="origin-trial"
-      content="A/kargTFyk8MR5ueravczef/wIlTkbVk1qXQesp39nV+xNECPdLBVeYffxrM8TmZT6RArWGQVCJ0LRivD7glcAUAAACQeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZS5jb206NDQzIiwiZmVhdHVyZSI6IkRpc2FibGVUaGlyZFBhcnR5U3RvcmFnZVBhcnRpdGlvbmluZzIiLCJleHBpcnkiOjE3NDIzNDIzOTksImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"
-    />
     <meta charset="utf-8" />
     <title>Contact Us - GOAT Technologies</title>
     <meta
@@ -41,14 +37,10 @@
       rel="preconnect"
       crossorigin="anonymous"
     />
-    <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
-    </script>
-    <script type="text/javascript">
-      (function(){
-          emailjs.init({
-            publicKey: "RfV6Td4rrNo9r1InV",
-          });
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+    <script>
+      (function () {
+        emailjs.init('RfV6Td4rrNo9r1InV'); // Initialize EmailJS with your User ID
       })();
     </script>
     <script
@@ -1106,7 +1098,7 @@
                                 id="Enquiry-For-3"
                                 name="Enquiry-For"
                                 data-name="Enquiry For"
-                                required=""
+                                required
                                 class="contact-form-field is-select w-select"
                               >
                                 <option value="">Select one...</option>
@@ -1681,8 +1673,7 @@
     <script>
       document.getElementById('wf-form-Contact-Form').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the default form submission
-    
-        // Get form data
+
         const formData = {
           name: document.getElementById('name').value,
           last_name: document.getElementById('Last-Name').value,
@@ -1694,8 +1685,9 @@
           company: document.getElementById('Company').value,
           city: document.getElementById('City-3').value,
         };
-    
-        // Send email using EmailJS
+
+        console.log(formData); // Check the output in the console
+
         emailjs.send('service_m7vdv03', 'template_gjibb9c', formData)
           .then(function(response) {
             console.log('SUCCESS!', response.status, response.text);
