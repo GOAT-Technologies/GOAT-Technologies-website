@@ -520,7 +520,7 @@
                             />
                             <div class="contact-hero-flex-content">
                               <p class="text-size-medium text-weight-medium">
-                                Kenya
+                                Africa
                               </p>
                               <p class="text-size-small">
                                 Nyeri, Kenya
@@ -565,7 +565,6 @@
                         id="wf-form-Contact-Form"
                         name="wf-form-Contact-Form"
                         data-name="Contact Form"
-                        method="POST"
                         class="contact-modal6_form"
                         aria-label="Contact Form"
                         >
@@ -1696,9 +1695,11 @@
           .then(function(response) {
             console.log('SUCCESS!', response.status, response.text);
             document.querySelector('.w-form-done').style.display = 'block'; // Show success message
+            document.querySelector('.w-form-fail').style.display = 'none';
           }, function(error) {
             console.log('FAILED...', error);
             document.querySelector('.w-form-fail').style.display = 'block'; // Show error message
+            document.querySelector('.w-form-fdone').style.display = 'none';
           });
       });
     </script>
