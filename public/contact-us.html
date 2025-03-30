@@ -18,6 +18,8 @@
           });
       })();
     </script>
+    <!-- Add reCAPTCHA API script -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:200,300,regular,500,600,700" media="all" />
   </head>
   <body>
@@ -240,6 +242,10 @@
                             <label for="Contact-form-Message" class="form_field-label">Message</label>
                             <textarea id="Contact-form-Message" name="Contact-form-Message" maxlength="5000" data-name="Contact form Message" placeholder="Type your message..." class="contact-form-field is-message w-input"></textarea>
                           </div>
+                          
+                          <!-- Add reCAPTCHA element -->
+                          <div class="g-recaptcha" data-sitekey="6LeY7QgqAAAAANhA4oNF5BM0dvQ2zZhKyY3nPg6c"></div>
+                          
                           <input type="submit" data-wait="Please wait..." class="button is-full-width w-button" value="Submit" id="submit-button" />
                         </form>
                         <div class="w-form-done" role="region" aria-label="Contact Form success">
@@ -377,6 +383,13 @@
       document.getElementById('wf-form-Contact-Form').addEventListener('submit', function(event) {
         event.preventDefault();
 
+        // Check if reCAPTCHA is completed
+        const recaptchaResponse = grecaptcha.getResponse();
+        if (!recaptchaResponse) {
+          alert('Please complete the reCAPTCHA verification');
+          return;
+        }
+
         const formData = {
           name: document.getElementById('name').value,
           last_name: document.getElementById('Last-Name').value,
@@ -387,6 +400,7 @@
           phone: document.getElementById('Phone-Number').value,
           company: document.getElementById('Company').value,
           city: document.getElementById('City-3').value,
+          'g-recaptcha-response': recaptchaResponse
         };
 
         emailjs.send('service_m7vdv03', 'template_gjibb9c', formData)
@@ -394,6 +408,7 @@
             document.querySelector('.w-form-done').style.display = 'block';
             document.querySelector('.w-form-fail').style.display = 'none';
             document.getElementById('wf-form-Contact-Form').reset();
+            grecaptcha.reset();
           }, function(error) {
             document.querySelector('.w-form-fail').style.display = 'block';
             document.querySelector('.w-form-done').style.display = 'none';
